@@ -10,6 +10,7 @@
   "license": "MIT",
   "dependencies": {
     "firebase": "^4.9.1",
-    "firebase-tools": "^3.17.4"
+    "firebase-tools": "^3.17.4",
+    "speech-synthesis": "^0.3.2"
   }
 }
