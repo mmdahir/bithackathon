@@ -10,6 +10,7 @@ import android.provider.MediaStore;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.text.method.ScrollingMovementMethod;
 import android.util.Log;
 import android.view.View;
 
@@ -31,6 +32,7 @@ import com.google.api.services.vision.v1.model.TextAnnotation;
 import java.io.ByteArrayOutputStream;
 
 import android.speech.tts.TextToSpeech;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import java.io.IOException;
@@ -38,7 +40,7 @@ import java.util.Arrays;
 
 public class MainActivity extends AppCompatActivity {
     private int MY_DATA_CHECK_CODE = 0;
-    private TextToSpeech tts;
+    private TextToSpeech mTextToSpeech;
     private ImageButton mCameraButton;
     private ImageButton mSynthButton;
     private TextView mTextBox;
@@ -48,6 +50,7 @@ public class MainActivity extends AppCompatActivity {
     private ImageView mImageView;
     private int REQUEST_IMAGE_CAPTURE = 1;
     private String mImageText;
+    private ProgressBar mSpinner;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,6 +65,11 @@ public class MainActivity extends AppCompatActivity {
         mImageView = findViewById(R.id.imageView);
         mCameraButton = findViewById(R.id.cameraButton);
 
+        mSpinner = findViewById(R.id.progressBar1);
+        mSpinner.setVisibility(View.GONE);
+
+        mTextBox.setMovementMethod(new ScrollingMovementMethod());
+
         Intent checkTTSIntent = new Intent();
         checkTTSIntent.setAction(TextToSpeech.Engine.ACTION_CHECK_TTS_DATA);
         startActivityForResult(checkTTSIntent, MY_DATA_CHECK_CODE);
@@ -74,7 +82,7 @@ public class MainActivity extends AppCompatActivity {
         mSynthButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                tts.speak(mTextBox.getText().toString(), TextToSpeech.QUEUE_FLUSH, null);
+                mTextToSpeech.speak(mTextBox.getText().toString(), TextToSpeech.QUEUE_FLUSH, null);
             }
         });
     }
@@ -106,22 +114,16 @@ public class MainActivity extends AppCompatActivity {
         }
         else if (requestCode == MY_DATA_CHECK_CODE) {
                 if (resultCode == TextToSpeech.Engine.CHECK_VOICE_DATA_PASS) {
-                    tts = new TextToSpeech(MainActivity.this, new TextToSpeech.OnInitListener() {
+                    mTextToSpeech = new TextToSpeech(MainActivity.this, new TextToSpeech.OnInitListener() {
 
                         @Override
                         public void onInit(int status) {
-
                             Log.d("text to speech", "init");
-
-                            if(status != TextToSpeech.ERROR)
-                            {
+                            if(status != TextToSpeech.ERROR) {
                                 Log.d("text to speech", "condition");
-
-                                tts.setPitch(1.1f);
-
-                                tts.setSpeechRate(0.4f);
-
-                                tts.setLanguage(Locale.US);
+                                mTextToSpeech.setPitch(1.1f);
+                                mTextToSpeech.setSpeechRate(0.4f);
+                                mTextToSpeech.setLanguage(Locale.US);
                             }}});
                 } else {
                     Intent installTTSIntent = new Intent();
@@ -146,6 +148,12 @@ public class MainActivity extends AppCompatActivity {
                 throw new IllegalArgumentException("One Credentials argument required.");
             }
 
+            mSpinner.setVisibility(View.VISIBLE);
+            mCameraButton.setVisibility(View.GONE);
+            mSynthButton.setVisibility(View.GONE);
+            mImageView.setVisibility(View.GONE);
+            mTextBox.setVisibility(View.GONE);
+
             byte[] image64String = bytes[0];
 
             try {
@@ -160,7 +168,7 @@ public class MainActivity extends AppCompatActivity {
                 Vision vision = visionBuilder.build();
 
                 Feature desiredFeature = new Feature();
-                desiredFeature.setType("TEXT_DETECTION");
+                desiredFeature.setType("DOCUMENT_TEXT_DETECTION");
 
                 Image inputImage = new Image();
                 inputImage.encodeContent(image64String);
@@ -195,6 +203,31 @@ public class MainActivity extends AppCompatActivity {
 
         protected void onPostExecute(String result) {
             mTextBox.setText(mImageText);
+            mSpinner.setVisibility(View.GONE);
+            mCameraButton.setVisibility(View.VISIBLE);
+            mImageView.setVisibility(View.VISIBLE);
+            mSynthButton.setVisibility(View.VISIBLE);
+            mTextBox.setVisibility(View.VISIBLE);
         }
     }
+
+    @Override
+    protected void onPause() {
+        if (mTextToSpeech != null) {
+            mTextToSpeech.stop();
+        }
+
+        super.onPause();
+    }
+
+    @Override
+    protected void onDestroy() {
+        if (mTextToSpeech != null) {
+            mTextToSpeech.stop();
+            mTextToSpeech.shutdown();
+        }
+
+        super.onDestroy();
+    }
+
 }
