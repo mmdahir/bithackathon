@@ -4,34 +4,24 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:textAppearance="@style/AppTheme"
+    android:background="?attr/colorPrimaryDark"
     tools:context="com.example.mustafdahir.bithackathon.MainActivity">
 
-    <Button
-        android:id="@+id/cameraButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="8dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        android:text="Open Camera"
-        app:layout_constraintBottom_toTopOf="@+id/editText2"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
 
     <EditText
         android:id="@+id/textBox"
         android:layout_width="245dp"
-        android:layout_height="119dp"
+        android:layout_height="0dp"
+        android:layout_marginBottom="284dp"
         android:layout_marginEnd="8dp"
         android:layout_marginStart="8dp"
         android:ems="10"
         android:inputType="textMultiLine"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.504"
-        app:layout_constraintStart_toStartOf="parent"
-        tools:layout_editor_absoluteY="108dp" />
+        app:layout_constraintStart_toStartOf="parent" />
 
     <Button
         android:id="@+id/synthButton"
@@ -41,7 +31,9 @@
         android:layout_marginEnd="8dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="36dp"
+        android:background="?attr/colorPrimary"
         android:text="Synthesize"
+        android:textColor="?attr/colorAccent"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -61,4 +53,16 @@
         app:layout_constraintTop_toBottomOf="@+id/textBox"
         app:srcCompat="@android:color/transparent" />
 
+    <ImageButton
+        android:id="@+id/cameraButton"
+        android:layout_width="56dp"
+        android:layout_height="38dp"
+        android:layout_marginBottom="16dp"
+        android:background="?attr/colorPrimary"
+        android:color="?attr/colorAccent"
+        app:layout_constraintBottom_toTopOf="@+id/textBox"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:srcCompat="@android:drawable/btn_star"
+        tools:layout_editor_absoluteX="164dp" />
 </android.support.constraint.ConstraintLayout>
