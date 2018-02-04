@@ -2,30 +2,21 @@ package com.example.mustafdahir.bithackathon;
 
 import android.Manifest;
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
-import android.hardware.Camera;
-import android.media.Image;
-import android.icu.text.SimpleDateFormat;
-import android.net.Uri;
 
 import java.util.Locale;
 import android.os.AsyncTask;
-import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.v4.app.ActivityCompat;
-import android.support.v4.content.ContextCompat;
-import android.support.v4.content.FileProvider;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Base64;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
-import android.widget.Toast;
 
 import com.google.api.client.extensions.android.json.AndroidJsonFactory;
 import com.google.api.client.googleapis.json.GoogleJsonResponseException;
@@ -42,8 +33,6 @@ import com.google.api.services.vision.v1.model.TextAnnotation;
 import java.io.ByteArrayOutputStream;
 
 import android.speech.tts.TextToSpeech;
-import android.speech.tts.TextToSpeech.OnInitListener;
-import android.content.Intent;
 
 import java.io.IOException;
 import java.util.Arrays;
@@ -51,25 +40,15 @@ import java.util.Arrays;
 public class MainActivity extends AppCompatActivity {
     private int MY_DATA_CHECK_CODE = 0;
     private TextToSpeech tts;
-    private ImageButton cameraButton;
-    private Button synthButton;
-    private EditText textBox;
-
-    private static final String CLOUD_VISION_API_KEY = "AIzaSyBK41jlj84lFA83tCPz8JAlBMgXm8lK7Gc";
-    public static final String FILE_NAME = "temp.jpg";
-    private static final String ANDROID_CERT_HEADER = "X-Android-Cert";
-    private static final String ANDROID_PACKAGE_HEADER = "X-Android-Package";
-
+    private ImageButton mCameraButton;
+    private Button mSynthButton;
+    private EditText mTextBox;
+    private static final String API_KEY = "AIzaSyBK41jlj84lFA83tCPz8JAlBMgXm8lK7Gc";
     private static final String TAG = MainActivity.class.getSimpleName();
-    private static final int GALLERY_PERMISSIONS_REQUEST = 0;
-    static final int REQUEST_TAKE_PHOTO = 1;
-
-
-    String mCurrentPhotoPath;
-    private Button synthButon;
+    private static final int REQUEST_TAKE_PHOTO = 1;
     private ImageView mImageView;
-    private Camera mCamera;
-    int REQUEST_IMAGE_CAPTURE = 1;
+    private int REQUEST_IMAGE_CAPTURE = 1;
+    private String mImageText;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -79,29 +58,33 @@ public class MainActivity extends AppCompatActivity {
         //camera permission check
         ActivityCompat.requestPermissions(this, new String[] {Manifest.permission.CAMERA}, 100);
 
-        cameraButton = (ImageButton) findViewById(R.id.cameraButton);
-        mImageView = (ImageView) findViewById(R.id.imageView);
-        synthButton = (Button) findViewById(R.id.synthButton);
-        textBox = (EditText) findViewById(R.id.textBox);
+        mSynthButton =  findViewById(R.id.synthButton);
+        mTextBox =  findViewById(R.id.textBox);
+        mImageView = findViewById(R.id.imageView);
+        mCameraButton = findViewById(R.id.cameraButton);
 
         Intent checkTTSIntent = new Intent();
         checkTTSIntent.setAction(TextToSpeech.Engine.ACTION_CHECK_TTS_DATA);
         startActivityForResult(checkTTSIntent, MY_DATA_CHECK_CODE);
         setUpCamera();
+        setUpSynth();
 
-    }
-
-
-    public void startSynth(CharSequence text){
-        Log.e("ok", ""+text);
     }
 
     public void setUpSynth() {
-        //TODO
+        mSynthButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.e("ok", "pressed");
+                Log.e( "yes", ""+mTextBox.getText());
+                tts.speak(mTextBox.getText().toString(), TextToSpeech.QUEUE_FLUSH, null);
+
+            }
+        });
     }
 
     public void setUpCamera() {
-        cameraButton.setOnClickListener(new View.OnClickListener() {
+        mCameraButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Log.e("ok", "pressed");
@@ -109,55 +92,11 @@ public class MainActivity extends AppCompatActivity {
             }
 
         });
-        synthButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Log.e("ok", "pressed");
-                Log.e( "yes", ""+textBox.getText());
-                tts.speak(textBox.getText().toString(), TextToSpeech.QUEUE_FLUSH, null);
-                startSynth(textBox.getText());
-            }
-        });
     }
 
     private void dispatchTakePictureIntent() {
         Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        // Ensure that there's a camera activity to handle the intent
-        if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
-            // Create the File where the photo should go
-            File photoFile = null;
-            photoFile = createImageFile();
-
-            // Continue only if the File was successfully created
-            if (photoFile != null) {
-                Uri photoURI = FileProvider.getUriForFile(this,
-                        "com.example.android.fileprovider",
-                        photoFile);
-                takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
-                startActivityForResult(takePictureIntent, REQUEST_TAKE_PHOTO);
-            }
-        }
-    }
-
-    private File createImageFile() {
-        try {
-            // Create an image file name
-            String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
-            String imageFileName = "JPEG_" + timeStamp + "_";
-            File storageDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES);
-            File image = File.createTempFile(
-                    imageFileName,  /* prefix */
-                    ".jpg",         /* suffix */
-                    storageDir      /* directory */
-            );
-
-            // Save a file: path for use with ACTION_VIEW intents
-            mCurrentPhotoPath = image.getAbsolutePath();
-            return image;
-        } catch (IOException e) {
-            Log.d(TAG, "dispatchTakePictureIntent: IOException");
-            return null;
-        }
+        startActivityForResult(takePictureIntent, REQUEST_TAKE_PHOTO);
     }
 
     @Override
@@ -168,8 +107,8 @@ public class MainActivity extends AppCompatActivity {
             mImageView.setImageBitmap(imageBitmap);
             AsyncTask<byte[], Void, String> task = new VisionTask();
             task.execute(getStringImage(imageBitmap));
-
-            if (requestCode == MY_DATA_CHECK_CODE) {
+        }
+        else if (requestCode == MY_DATA_CHECK_CODE) {
                 if (resultCode == TextToSpeech.Engine.CHECK_VOICE_DATA_PASS) {
                     tts = new TextToSpeech(MainActivity.this, new TextToSpeech.OnInitListener() {
 
@@ -194,7 +133,7 @@ public class MainActivity extends AppCompatActivity {
                     installTTSIntent.setAction(TextToSpeech.Engine.ACTION_INSTALL_TTS_DATA);
                     startActivity(installTTSIntent);
                 }
-            }
+
         }
 
     }
@@ -254,6 +193,7 @@ public class MainActivity extends AppCompatActivity {
 //                Toast.makeText(getApplicationContext(),
 //                        text.getText(), Toast.LENGTH_LONG).show();
                 Log.d(TAG, text.getText());
+                mImageText = text.getText();
 
             } catch (GoogleJsonResponseException e) {
                 Log.d(TAG, "failed to make API request because " + e.getContent());
@@ -266,6 +206,7 @@ public class MainActivity extends AppCompatActivity {
 
         protected void onPostExecute(String result) {
             //set text
+            mTextBox.setText(mImageText);
         }
     }
 }
