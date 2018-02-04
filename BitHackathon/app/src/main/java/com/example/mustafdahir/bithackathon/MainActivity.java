@@ -121,8 +121,8 @@ public class MainActivity extends AppCompatActivity {
                             Log.d("text to speech", "init");
                             if(status != TextToSpeech.ERROR) {
                                 Log.d("text to speech", "condition");
-                                mTextToSpeech.setPitch(1.1f);
-                                mTextToSpeech.setSpeechRate(0.4f);
+                                mTextToSpeech.setPitch(1.0f);
+                                mTextToSpeech.setSpeechRate(0.8f);
                                 mTextToSpeech.setLanguage(Locale.US);
                             }}});
                 } else {
