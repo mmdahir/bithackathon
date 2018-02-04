@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "1017175731931",
+    "firebase_url": "https://hackathon-fb2018.firebaseio.com",
+    "project_id": "hackathon-fb2018",
+    "storage_bucket": "hackathon-fb2018.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1017175731931:android:d0783b045fe36a03",
+        "android_client_info": {
+          "package_name": "com.example.mustafdahir.bithackathon"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1017175731931-t9rd5tjaqnukm2c7tbnspeotub9f1h37.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.mustafdahir.bithackathon",
+            "certificate_hash": "a7da1c53cac0fa49b89dec593d960114f4592696"
+          }
+        },
+        {
+          "client_id": "1017175731931-2csi22hkp1qnvl4l1vv1hv9r6aaaalr5.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC6riNlkQSBxu1P7ruBAIglrgVOvKQTIrE"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1017175731931-2csi22hkp1qnvl4l1vv1hv9r6aaaalr5.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
