@@ -13,11 +13,13 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 
 public class MainActivity extends AppCompatActivity {
 
     private Button cameraButton;
-    private Button synthButon;
+    private Button synthButton;
+    private EditText textBox;
     private Camera mCamera;
 
     @Override
@@ -29,6 +31,8 @@ public class MainActivity extends AppCompatActivity {
         ActivityCompat.requestPermissions(this, new String[] {Manifest.permission.CAMERA}, 100);
         mCamera = getCameraInstance();
         cameraButton = (Button) findViewById(R.id.cameraButton);
+        synthButton = (Button) findViewById(R.id.synthButton);
+        textBox = (EditText) findViewById(R.id.textBox);
         setUpCamera();
 
     }
@@ -39,6 +43,9 @@ public class MainActivity extends AppCompatActivity {
         if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
             startActivityForResult(takePictureIntent, 1);
         }
+    }
+    public void startSynth(CharSequence text){
+        Log.e("ok", ""+text);
     }
 
     public static Camera getCameraInstance(){
@@ -65,5 +72,14 @@ public class MainActivity extends AppCompatActivity {
                 dispatchTakePictureIntent();
             }
         });
+        synthButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.e("ok", "pressed");
+                Log.e( "yes", ""+textBox.getText());
+                startSynth(textBox.getText());
+            }
+        });
+
     }
 }
