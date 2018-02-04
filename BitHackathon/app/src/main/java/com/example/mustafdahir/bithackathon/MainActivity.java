@@ -12,9 +12,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
-import android.widget.Button;
 
-import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 
@@ -33,6 +31,7 @@ import com.google.api.services.vision.v1.model.TextAnnotation;
 import java.io.ByteArrayOutputStream;
 
 import android.speech.tts.TextToSpeech;
+import android.widget.TextView;
 
 import java.io.IOException;
 import java.util.Arrays;
@@ -41,10 +40,10 @@ public class MainActivity extends AppCompatActivity {
     private int MY_DATA_CHECK_CODE = 0;
     private TextToSpeech tts;
     private ImageButton mCameraButton;
-    private Button mSynthButton;
-    private EditText mTextBox;
+    private ImageButton mSynthButton;
+    private TextView mTextBox;
     private static final String API_KEY = "AIzaSyBK41jlj84lFA83tCPz8JAlBMgXm8lK7Gc";
-    private static final String TAG = MainActivity.class.getSimpleName();
+    private static final String TAG = "tag";
     private static final int REQUEST_TAKE_PHOTO = 1;
     private ImageView mImageView;
     private int REQUEST_IMAGE_CAPTURE = 1;
@@ -75,10 +74,7 @@ public class MainActivity extends AppCompatActivity {
         mSynthButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Log.e("ok", "pressed");
-                Log.e( "yes", ""+mTextBox.getText());
                 tts.speak(mTextBox.getText().toString(), TextToSpeech.QUEUE_FLUSH, null);
-
             }
         });
     }
@@ -127,13 +123,11 @@ public class MainActivity extends AppCompatActivity {
 
                                 tts.setLanguage(Locale.US);
                             }}});
-                }
-                else {
+                } else {
                     Intent installTTSIntent = new Intent();
                     installTTSIntent.setAction(TextToSpeech.Engine.ACTION_INSTALL_TTS_DATA);
                     startActivity(installTTSIntent);
                 }
-
         }
 
     }
@@ -141,10 +135,7 @@ public class MainActivity extends AppCompatActivity {
     public byte[] getStringImage(Bitmap image) {
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         image.compress(Bitmap.CompressFormat.JPEG, 100, baos);
-        byte[] imageBytes = baos.toByteArray();
-//        String encodedImage = Base64.encodeToString(imageBytes, Base64.DEFAULT);
-//        Log.d("tag", encodedImage);
-        return imageBytes;
+        return baos.toByteArray();
     }
 
     private class VisionTask extends AsyncTask<byte[], Void, String> {
@@ -190,8 +181,6 @@ public class MainActivity extends AppCompatActivity {
                 final TextAnnotation text = batchResponse.getResponses()
                         .get(0).getFullTextAnnotation();
 
-//                Toast.makeText(getApplicationContext(),
-//                        text.getText(), Toast.LENGTH_LONG).show();
                 Log.d(TAG, text.getText());
                 mImageText = text.getText();
 
@@ -205,7 +194,6 @@ public class MainActivity extends AppCompatActivity {
         }
 
         protected void onPostExecute(String result) {
-            //set text
             mTextBox.setText(mImageText);
         }
     }

@@ -1,6 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <color name="colorPrimary">#3F51B5</color>
-    <color name="colorPrimaryDark">#303F9F</color>
-    <color name="colorAccent">#FF4081</color>
+    <color name="colorPrimaryDark">#121e30</color>
+    <color name="colorAccent">#ff4081</color>
+    <color name="backGroundColor">#c5a43575</color>
+    <color name="greenNeon">#3F51B5</color>
+    <color name="primary_material_dark_1">#02414d</color>
+    <color name="secondary_text_default_material_light">#c1003505</color>
 </resources>

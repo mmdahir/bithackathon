@@ -1,10 +1,23 @@
 <resources>
     <!-- Base application theme. -->
-    <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
+    <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
         <!-- Customize your theme here. -->
-        <item name="colorPrimary">#4b2e83</item>
-        <item name="colorPrimaryDark">#d9d9d9</item>
-        <item name="colorAccent">#b7a57a</item>
+        <item name="colorPrimary">@color/backGroundColor</item>
+        <item name="colorPrimaryDark">@color/backGroundColor</item>
+        <item name="colorAccent">@color/greenNeon</item>
+        <item name="android:windowBackground">@color/backGroundColor</item>
+        <item name="android:colorBackground">@color/backGroundColor</item>
+        <item name="android:statusBarColor">@color/colorAccent</item>
+        <item name="android:textColorSecondary">@color/greenNeon</item>
+        <item name="android:textColorPrimary">@color/colorAccent</item>
+    </style>
+
+    <style name="custom" parent="Theme.AppCompat.NoActionBar" >
+        <item name="colorPrimary">@color/primary_material_dark_1</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="android:colorBackground">@color/backGroundColor</item>
+        <item name="android:navigationBarColor">@android:color/transparent</item>
+        <item name="android:textColorSecondaryInverse">?attr/actionModeSplitBackground</item>
     </style>
 
 </resources>
