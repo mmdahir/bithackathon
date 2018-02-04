@@ -7,17 +7,15 @@
         <item name="colorAccent">@color/greenNeon</item>
         <item name="android:windowBackground">@color/backGroundColor</item>
         <item name="android:colorBackground">@color/backGroundColor</item>
-        <item name="android:statusBarColor">@color/colorAccent</item>
+        <item name="android:statusBarColor">#a52e286c</item>
         <item name="android:textColorSecondary">@color/greenNeon</item>
-        <item name="android:textColorPrimary">@color/colorAccent</item>
+        <item name="android:textColorPrimary">#ffffff</item>
+        <item name="android:buttonStyle">@style/ButtonColor</item>
+        <item name="android:textColorHint">#c69b9999</item>
+
     </style>
 
-    <style name="custom" parent="Theme.AppCompat.NoActionBar" >
-        <item name="colorPrimary">@color/primary_material_dark_1</item>
-        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
-        <item name="android:colorBackground">@color/backGroundColor</item>
-        <item name="android:navigationBarColor">@android:color/transparent</item>
-        <item name="android:textColorSecondaryInverse">?attr/actionModeSplitBackground</item>
+    <style name="ButtonColor">
+        <item name="android:textColor">#0e1e43</item>
     </style>
-
 </resources>
