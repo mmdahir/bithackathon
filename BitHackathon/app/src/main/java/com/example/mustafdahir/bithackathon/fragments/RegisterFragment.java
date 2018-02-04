@@ -76,20 +76,25 @@ public class RegisterFragment extends Fragment implements View.OnClickListener{
         mUsername = ((EditText) v.findViewById(R.id.registerEmail)).getText().toString();
         mPassword = ((EditText) v.findViewById(R.id.registerPassword)).getText().toString();
 
-        mAuth.createUserWithEmailAndPassword(mUsername, mPassword)
-                .addOnCompleteListener(((Activity) getContext()), new OnCompleteListener<AuthResult>() {
-                    @Override
-                    public void onComplete(@NonNull Task<AuthResult> task) {
-                        if (task.isSuccessful()) {
-                            Intent intent = new Intent(getContext(), MainActivity.class);
-                            intent.putExtra("Username", mUsername);
-                            startActivity(intent);
-                        } else {
-                            // If sign in fails, display a message to the user.
-                            Toast.makeText(getContext(), "Authentication failed.",
-                                    Toast.LENGTH_SHORT).show();
+        try {
+            mAuth.createUserWithEmailAndPassword(mUsername, mPassword)
+                    .addOnCompleteListener(((Activity) getContext()), new OnCompleteListener<AuthResult>() {
+                        @Override
+                        public void onComplete(@NonNull Task<AuthResult> task) {
+                            if (task.isSuccessful()) {
+                                Intent intent = new Intent(getContext(), MainActivity.class);
+                                intent.putExtra("Username", mUsername);
+                                startActivity(intent);
+                            } else {
+                                // If sign in fails, display a message to the user.
+                                Toast.makeText(getContext(), "Authentication failed.",
+                                        Toast.LENGTH_SHORT).show();
+                            }
                         }
-                    }
-                });
+                    });
+        } catch (IllegalArgumentException e) {
+            Toast.makeText(getContext(), "Invalid parameters.",
+                    Toast.LENGTH_SHORT).show();
+        }
     }
 }
